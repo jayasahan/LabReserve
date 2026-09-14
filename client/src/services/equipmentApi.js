@@ -1,15 +1,9 @@
-const API_URL = import.meta.env.VITE_API_URL || '/api'
-const TOKEN_KEY = 'labreserve_token'
+import { API_URL, getAuthHeaders } from './api.js'
 
 async function readResponse(response) {
   const data = await response.json().catch(() => ({}))
   if (!response.ok) throw new Error(data.message || 'Unable to complete the equipment request')
   return data
-}
-
-function authHeaders() {
-  const token = localStorage.getItem(TOKEN_KEY)
-  return token ? { Authorization: `Bearer ${token}` } : {}
 }
 
 export async function fetchEquipment({ search = '', category = '' } = {}) {
@@ -18,14 +12,14 @@ export async function fetchEquipment({ search = '', category = '' } = {}) {
   if (category && category !== 'All') params.set('category', category)
   const query = params.toString()
   const response = await fetch(`${API_URL}/equipment${query ? `?${query}` : ''}`, {
-    headers: authHeaders()
+    headers: getAuthHeaders()
   })
   const data = await readResponse(response)
   return data.equipment
 }
 
 export async function fetchEquipmentById(id) {
-  const response = await fetch(`${API_URL}/equipment/${id}`, { headers: authHeaders() })
+  const response = await fetch(`${API_URL}/equipment/${id}`, { headers: getAuthHeaders() })
   const data = await readResponse(response)
   return data.equipment
 }
@@ -33,7 +27,7 @@ export async function fetchEquipmentById(id) {
 export async function createEquipment(equipment) {
   const response = await fetch(`${API_URL}/equipment`, {
     method: 'POST',
-    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
     body: JSON.stringify(equipment)
   })
   const data = await readResponse(response)
@@ -43,7 +37,7 @@ export async function createEquipment(equipment) {
 export async function updateEquipment(id, equipment) {
   const response = await fetch(`${API_URL}/equipment/${id}`, {
     method: 'PUT',
-    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
     body: JSON.stringify(equipment)
   })
   const data = await readResponse(response)
@@ -53,7 +47,7 @@ export async function updateEquipment(id, equipment) {
 export async function deleteEquipment(id) {
   const response = await fetch(`${API_URL}/equipment/${id}`, {
     method: 'DELETE',
-    headers: authHeaders()
+    headers: getAuthHeaders()
   })
   return readResponse(response)
 }

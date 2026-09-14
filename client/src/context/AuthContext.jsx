@@ -1,8 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { API_URL, clearToken, getAuthHeaders, getToken, setToken } from '../services/api.js'
 
 const AuthContext = createContext(null)
-const API_URL = import.meta.env.VITE_API_URL || '/api'
-const TOKEN_KEY = 'labreserve_token'
 
 async function readResponse(response) {
   const data = await response.json().catch(() => ({}))
@@ -15,17 +14,17 @@ function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const token = localStorage.getItem(TOKEN_KEY)
+    const token = getToken()
     if (!token) {
       setLoading(false)
       return
     }
 
-    fetch(`${API_URL}/auth/me`, { headers: { Authorization: `Bearer ${token}` } })
+    fetch(`${API_URL}/auth/me`, { headers: getAuthHeaders() })
       .then(readResponse)
       .then((data) => setUser(data.user))
       .catch(() => {
-        localStorage.removeItem(TOKEN_KEY)
+        clearToken()
         setUser(null)
       })
       .finally(() => setLoading(false))
@@ -38,7 +37,7 @@ function AuthProvider({ children }) {
       body: JSON.stringify({ email, password })
     })
     const data = await readResponse(response)
-    localStorage.setItem(TOKEN_KEY, data.token)
+    setToken(data.token)
     setUser(data.user)
     return data.user
   }
@@ -50,13 +49,13 @@ function AuthProvider({ children }) {
       body: JSON.stringify({ name, email, password })
     })
     const data = await readResponse(response)
-    localStorage.setItem(TOKEN_KEY, data.token)
+    setToken(data.token)
     setUser(data.user)
     return data.user
   }
 
   function logout() {
-    localStorage.removeItem(TOKEN_KEY)
+    clearToken()
     setUser(null)
   }
 

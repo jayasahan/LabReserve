@@ -1,5 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || '/api'
-const TOKEN_KEY = 'labreserve_token'
+import { API_URL, getAuthHeaders } from './api.js'
 
 async function readResponse(response) {
   const data = await response.json().catch(() => ({}))
@@ -7,15 +6,10 @@ async function readResponse(response) {
   return data
 }
 
-function authHeaders() {
-  const token = localStorage.getItem(TOKEN_KEY)
-  return token ? { Authorization: `Bearer ${token}` } : {}
-}
-
 export async function createRequest(equipmentId) {
   const response = await fetch(`${API_URL}/requests`, {
     method: 'POST',
-    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ equipmentId })
   })
   const data = await readResponse(response)
@@ -23,7 +17,7 @@ export async function createRequest(equipmentId) {
 }
 
 export async function fetchMyRequests() {
-  const response = await fetch(`${API_URL}/requests/my`, { headers: authHeaders() })
+  const response = await fetch(`${API_URL}/requests/my`, { headers: getAuthHeaders() })
   const data = await readResponse(response)
   return data.requests
 }
@@ -31,14 +25,14 @@ export async function fetchMyRequests() {
 export async function cancelRequest(requestId) {
   const response = await fetch(`${API_URL}/requests/${requestId}/cancel`, {
     method: 'PATCH',
-    headers: authHeaders()
+    headers: getAuthHeaders()
   })
   const data = await readResponse(response)
   return data.request
 }
 
 export async function fetchAllRequests() {
-  const response = await fetch(`${API_URL}/requests`, { headers: authHeaders() })
+  const response = await fetch(`${API_URL}/requests`, { headers: getAuthHeaders() })
   const data = await readResponse(response)
   return data.requests
 }
@@ -46,7 +40,7 @@ export async function fetchAllRequests() {
 async function updateRequest(requestId, action) {
   const response = await fetch(`${API_URL}/requests/${requestId}/${action}`, {
     method: 'PATCH',
-    headers: authHeaders()
+    headers: getAuthHeaders()
   })
   const data = await readResponse(response)
   return data.request
