@@ -2,7 +2,6 @@
 
 LabReserve is a laboratory equipment request and management web application built for a university project. It supports a student workflow for browsing equipment, creating requests, and tracking their own request history, alongside an admin workflow for managing equipment and processing requests.
 
-The project follows the course rules in AGENTS.md and keeps the architecture simple, explainable, and aligned with the approved Figma design.
 
 ## Overview
 
