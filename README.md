@@ -60,7 +60,6 @@ LabReserve/
 │   ├── scripts/
 │   ├── package.json
 │   └── server.js
-├── AGENTS.md
 ├── Dockerfile
 ├── README.md
 └── .gitignore
@@ -168,7 +167,7 @@ The backend exposes REST routes in the `/api` namespace, including:
 
 - This project is intentionally simple and educational rather than over-engineered.
 - The backend is the security boundary; role checks and workflow validations are enforced there.
-- AGENTS.md is the guiding project instruction file for architectural and workflow constraints.
+
 
 ## Important Project Guidance
 
