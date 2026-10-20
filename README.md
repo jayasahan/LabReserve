@@ -2,7 +2,6 @@
 
 LabReserve is a laboratory equipment request and management web application built for a university project. It supports a student workflow for browsing equipment, creating requests, and tracking their own request history, alongside an admin workflow for managing equipment and processing requests.
 
-The project follows the course rules in AGENTS.md and keeps the architecture simple, explainable, and aligned with the approved Figma design.
 
 ## Overview
 
@@ -61,7 +60,6 @@ LabReserve/
 │   ├── scripts/
 │   ├── package.json
 │   └── server.js
-├── AGENTS.md
 ├── Dockerfile
 ├── README.md
 └── .gitignore
@@ -169,7 +167,7 @@ The backend exposes REST routes in the `/api` namespace, including:
 
 - This project is intentionally simple and educational rather than over-engineered.
 - The backend is the security boundary; role checks and workflow validations are enforced there.
-- AGENTS.md is the guiding project instruction file for architectural and workflow constraints.
+
 
 ## Important Project Guidance
 
